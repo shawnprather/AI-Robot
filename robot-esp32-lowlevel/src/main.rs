@@ -4,7 +4,8 @@ use esp_idf_svc::hal::gpio::PinDriver;
 use esp_idf_svc::hal::peripherals::Peripherals;
 use esp_idf_svc::hal::i2c::*;
 use esp_idf_svc::hal::units::Hertz;
-use esp_idf_svc::sys::TickType_t;
+
+mod sensors;
 
 fn main() {
     // It is necessary to call this function once. Otherwise, some patches to the runtime
@@ -14,34 +15,37 @@ fn main() {
     // Bind the log crate to the ESP Logging facilities
     esp_idf_svc::log::EspLogger::initialize_default();
  
-    log::info!("Hello, world!");
-    FreeRtos::delay_ms(5000);
+    log::info!("Powered On");
+    FreeRtos::delay_ms(1000);
 
     let peripherals = Peripherals::take().unwrap();
-    let green_button = PinDriver::input(peripherals.pins.gpio7, Pull::Up).unwrap();
-    
-    log::info!("Survived the panic");
+    //let green_button = PinDriver::input(peripherals.pins.gpio7, Pull::Up).unwrap();
 
     let config = I2cConfig::new().baudrate(Hertz(60));
     let sda = peripherals.pins.gpio8;
     let scl = peripherals.pins.gpio9;
-    let mut value = [0u8; 1];
-
     let mut i2c_driver = I2cDriver::new(peripherals.i2c0, sda, scl, &config).unwrap();
     
-    loop {
-        match i2c_driver.write_read(0x68u8, &[0x75u8], &mut value, 800u32) {
-            Ok(_) => log::info!("I AM: {}", value[0]),
-            Err(e) => log::error!("I2C error: {:?}", e),
-        }
+    match sensors::mpu6050::wake(&mut i2c_driver) {
+        Ok(_) => log::info!("Woke"),
+        Err(e) => log::error!("I2C MPU Wake Error: {:?}", e)
     }
 
-    // loop {
-    //     if green_button.is_low() {
-    //         log::info!("Happy happy happy!!!");
-    //         FreeRtos::delay_ms(500);
-    //     }
-    //     FreeRtos::delay_ms(500);
-    // }
+    match sensors::mpu6050::who_am_i(&mut i2c_driver) {
+        Ok(val) => log::info!("I AM: {}", val),
+        Err(e) => log::error!("I2C error: {:?}", e),
+    }
+
+    loop {
+        match sensors::mpu6050::get_accel_data(&mut i2c_driver) {
+            Ok(accel) => log::info!("Accel: [{}] [{}] [{}]", accel[0], accel[1], accel[2]),
+            Err(e) => log::error!("I2C error, get accel: {:?}", e),
+        }
+
+        match sensors::mpu6050::get_gyro_data(&mut i2c_driver) {
+            Ok(gyro) => log::info!("Gyro: [{}] [{}] [{}]", gyro[0], gyro[1], gyro[2]),
+            Err(e) => log::error!("I2C error, get gyro: {:?}", e),
+        }
+    }
     
 }
