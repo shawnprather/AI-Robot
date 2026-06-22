@@ -5,6 +5,8 @@ use esp_idf_svc::hal::peripherals::Peripherals;
 use esp_idf_svc::hal::i2c::*;
 use esp_idf_svc::hal::units::Hertz;
 
+use crate::sensors::mpu6050;
+
 mod sensors;
 
 fn main() {
@@ -19,33 +21,31 @@ fn main() {
     FreeRtos::delay_ms(1000);
 
     let peripherals = Peripherals::take().unwrap();
-    //let green_button = PinDriver::input(peripherals.pins.gpio7, Pull::Up).unwrap();
 
-    let config = I2cConfig::new().baudrate(Hertz(60));
+    // I2c Setup
+    let config = I2cConfig::new().baudrate(Hertz(6000));
     let sda = peripherals.pins.gpio8;
     let scl = peripherals.pins.gpio9;
     let mut i2c_driver = I2cDriver::new(peripherals.i2c0, sda, scl, &config).unwrap();
     
-    match sensors::mpu6050::wake(&mut i2c_driver) {
-        Ok(_) => log::info!("Woke"),
-        Err(e) => log::error!("I2C MPU Wake Error: {:?}", e)
-    }
-
-    match sensors::mpu6050::who_am_i(&mut i2c_driver) {
-        Ok(val) => log::info!("I AM: {}", val),
-        Err(e) => log::error!("I2C error: {:?}", e),
-    }
+    let mpu = mpu6050::Mpu6050::new(&mut i2c_driver).unwrap_or_else(|e| {
+        log::error!("MPU init failed: {:?}", e);
+        panic!("MPU failed error");
+    });
 
     loop {
-        match sensors::mpu6050::get_accel_data(&mut i2c_driver) {
-            Ok(accel) => log::info!("Accel: [{}] [{}] [{}]", accel[0], accel[1], accel[2]),
-            Err(e) => log::error!("I2C error, get accel: {:?}", e),
-        }
 
-        match sensors::mpu6050::get_gyro_data(&mut i2c_driver) {
-            Ok(gyro) => log::info!("Gyro: [{}] [{}] [{}]", gyro[0], gyro[1], gyro[2]),
+        match mpu.get_mpu_state(&mut i2c_driver) {
+            Ok(reading) => log::info!("Gyro: [{:.0}] [{:.0}] [{:.0}], Accel: [{:.2}] [{:.2}] [{:.2}], Magnitude: [{:.2}]", reading.gyro[0], reading.gyro[1], reading.gyro[2], reading.accel[0], reading.accel[1], reading.accel[2], reading.accel_magnitude),
             Err(e) => log::error!("I2C error, get gyro: {:?}", e),
         }
+
+        // match sensors::sht31::read_data(&mut i2c_driver) {
+        //     Ok(data) => log::info!("Data Temp: {}, Humid {}", data.temperature, data.humidity),
+        //     Err(e) => log::error!("I2C error, read_data: {:?}", e),
+        // }
+
+        FreeRtos::delay_ms(100);
     }
     
 }
