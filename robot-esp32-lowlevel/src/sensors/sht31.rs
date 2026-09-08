@@ -25,21 +25,25 @@ pub struct Reading {
     pub humidity: f32,
 }
 
-/// This function takes the I2C driver and does a clock streched high accuracy info pull and returns the Raw Reading struct
-fn read_raw_data(i2c_driver: &mut I2cDriver) -> Result<RawReading, EspError> {
-    let mut buffer = [0u8; 6];
-    i2c_driver.write_read(SHT_ADDR, &[MEASURE_CMD_MSB, MEASURE_CMD_LSB], &mut buffer, DEFAULT_TIMEOUT)?;
-    let raw_temperature = (buffer[0] as u16) << 8 | (buffer[1] as u16);
-    let raw_humidity= (buffer[3] as u16) << 8 | (buffer[4] as u16);
-    
-    Ok(RawReading { raw_temperature, raw_humidity})
-}
+pub struct Sht31 {}
 
-/// This function takes the I2C driver and does a clock streched high accuracy info pull and returns the Reading struct
-pub fn read_data(i2c_driver: &mut I2cDriver) -> Result<Reading, EspError> {
-    let raw_data = read_raw_data(i2c_driver)?;
-    let humidity = ((raw_data.raw_humidity as f32) / 65535.0) * 100.0;
-    let temperature = (((raw_data.raw_temperature as f32) / 65535.0) * 315.0) - 49.0;
-    
-    Ok(Reading { temperature, humidity })
+impl Sht31 {
+    /// This function takes the I2C driver and does a clock streched high accuracy info pull and returns the Raw Reading struct
+    fn read_raw_data(i2c_driver: &mut I2cDriver) -> Result<RawReading, EspError> {
+        let mut buffer = [0u8; 6];
+        i2c_driver.write_read(SHT_ADDR, &[MEASURE_CMD_MSB, MEASURE_CMD_LSB], &mut buffer, DEFAULT_TIMEOUT)?;
+        let raw_temperature = (buffer[0] as u16) << 8 | (buffer[1] as u16);
+        let raw_humidity= (buffer[3] as u16) << 8 | (buffer[4] as u16);
+        
+        Ok(RawReading { raw_temperature, raw_humidity})
+    }
+
+    /// This function takes the I2C driver and does a clock streched high accuracy info pull and returns the Reading struct
+    pub fn read_data(i2c_driver: &mut I2cDriver) -> Result<Reading, EspError> {
+        let raw_data = Self::read_raw_data(i2c_driver)?;
+        let humidity = ((raw_data.raw_humidity as f32) / 65535.0) * 100.0;
+        let temperature = (((raw_data.raw_temperature as f32) / 65535.0) * 315.0) - 49.0;
+        
+        Ok(Reading { temperature, humidity })
+    }
 }
