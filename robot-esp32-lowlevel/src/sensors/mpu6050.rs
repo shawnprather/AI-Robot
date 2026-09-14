@@ -2,6 +2,8 @@ use esp_idf_svc::hal::i2c::*;
 use esp_idf_svc::hal::sys::EspError;
 use esp_idf_svc::hal::delay::FreeRtos;
 
+use std::fmt;
+
 // https://cdn.sparkfun.com/datasheets/Sensors/Accelerometers/RM-MPU-6000A.pdf
 
 // Addresses
@@ -18,10 +20,18 @@ const DEFAULT_TIMEOUT: u32 = 500;
 const DEFAULT_N_CALIBRATION: usize = 40;
 
 // Info struct
-pub struct Reading {
+pub struct PositionReading {
     pub accel: [f32; 3],
     pub gyro: [f32; 3],
     pub accel_magnitude: f32
+}
+
+impl fmt::Display for PositionReading {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MPU: accel {:.2} {:.2} {:.2} gyro {:.2} {:.2} {:.2} accel mag {:.2}",
+            self.accel[0], self.accel[1], self.accel[2], self.gyro[0], self.gyro[1],
+            self.gyro[2], self.accel_magnitude)
+    }
 }
 
 // MPU struct
@@ -74,11 +84,11 @@ impl Mpu6050 {
         Ok([accel_x, accel_y, accel_z])
     }
 
-    pub fn get_mpu_state(&self, i2c: &mut I2cDriver) -> Result<Reading, EspError> {
+    pub fn get_mpu_state(&self, i2c: &mut I2cDriver) -> Result<PositionReading, EspError> {
         let gyro = self.get_gyro_data(i2c)?;
         let accel = self.get_accel_data(i2c)?;
         let accel_magnitude = ((accel[0] as f32).powi(2) + (accel[1] as f32).powi(2) + (accel[2] as f32).powi(2)).sqrt();
-        Ok(Reading { accel, gyro, accel_magnitude })
+        Ok(PositionReading { accel, gyro, accel_magnitude })
     }
 }
 
