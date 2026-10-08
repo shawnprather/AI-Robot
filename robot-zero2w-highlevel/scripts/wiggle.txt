@@ -1,0 +1,5 @@
+# WIGGLE - sway then a pushup, as one reusable move
+# Shows nesting: dance.txt runs this, and this runs two other scripts.
+
+RUN sway.txt
+RUN pushup.txt

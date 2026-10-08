@@ -1,0 +1,22 @@
+# PUSHUP - all feet rotate up together, lowering the body, then back down
+# Starts and ends in neutral stand.
+
+# Lower body (all feet toward horizontal)
+SERVO QL 50
+SERVO EL 130
+SERVO ZL 130
+SERVO CL 50
+DELAY 200
+
+# Hold at the bottom
+DELAY 300
+
+# Push back up
+SERVO QL 0
+SERVO EL 180
+SERVO ZL 180
+SERVO CL 0
+DELAY 200
+
+# Hold at the top
+DELAY 300

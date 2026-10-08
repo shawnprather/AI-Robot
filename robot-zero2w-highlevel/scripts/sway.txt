@@ -1,0 +1,23 @@
+# SWAY - lean left, center, lean right, center
+# Starts and ends in neutral stand.
+# Lowering one side's feet tilts the body toward that side.
+
+# Lean left (left feet up)
+SERVO QL 35
+SERVO ZL 145
+DELAY 200
+
+# Center
+SERVO QL 0
+SERVO ZL 180
+DELAY 200
+
+# Lean right (right feet up)
+SERVO EL 145
+SERVO CL 35
+DELAY 200
+
+# Center
+SERVO EL 180
+SERVO CL 0
+DELAY 200

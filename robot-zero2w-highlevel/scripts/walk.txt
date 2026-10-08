@@ -1,0 +1,82 @@
+# ==========================================================
+# Quadruped diagonal trot - single walk cycle
+# Names: Q=front-left  E=front-right  Z=rear-left  C=rear-right
+#        U=hip (swings fwd/back)  L=foot (lifts/plants)
+# Pair A = QU QL CU CL (front-left + rear-right)
+# Pair B = EU EL ZU ZL (front-right + rear-left)
+# Hip forward:  QU,ZU decrease | EU,CU increase
+# Foot lift:    QL,CL increase | EL,ZL decrease
+# ==========================================================
+
+# --- STEP 1: STAND (all neutral, X-shaped crab stance, feet straight down) ---
+SERVO QU 45
+SERVO EU 135
+SERVO ZU 135
+SERVO CU 45
+SERVO QL 0
+SERVO EL 180
+SERVO ZL 180
+SERVO CL 0
+DELAY 200
+
+# --- STEP 2: Lift pair A (front-left + rear-right feet up 40) ---
+SERVO QL 40
+SERVO CL 40
+DELAY 200
+
+# --- STEP 3: Pair A swings forward 20 in the air; pair B pushes back 20 to move body forward ---
+SERVO QU 25
+SERVO CU 65
+SERVO EU 115
+SERVO ZU 155
+DELAY 200
+
+# --- STEP 4: Plant pair A ---
+SERVO QL 0
+SERVO CL 0
+DELAY 200
+
+# --- STEP 5: Lift pair B (front-right + rear-left feet up 40) ---
+SERVO EL 140
+SERVO ZL 140
+DELAY 200
+
+# --- STEP 6: Pair B swings to +20 forward in the air; pair A pushes back to -20 ---
+SERVO EU 155
+SERVO ZU 115
+SERVO QU 65
+SERVO CU 25
+DELAY 200
+
+# --- STEP 7: Plant pair B ---
+SERVO EL 180
+SERVO ZL 180
+DELAY 200
+
+# --- STEP 8: RETURN TO STAND (one pair at a time, so a diagonal always stays planted) ---
+# Lift A
+SERVO QL 40
+SERVO CL 40
+DELAY 200
+# Center A hips
+SERVO QU 45
+SERVO CU 45
+DELAY 200
+# Plant A
+SERVO QL 0
+SERVO CL 0
+DELAY 200
+# Lift B
+SERVO EL 140
+SERVO ZL 140
+DELAY 200
+# Center B hips
+SERVO EU 135
+SERVO ZU 135
+DELAY 200
+# Plant B
+SERVO EL 180
+SERVO ZL 180
+DELAY 200
+
+# Done - back in neutral stand

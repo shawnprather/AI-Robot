@@ -1,0 +1,12 @@
+# STAND - all servos neutral (X-shaped crab stance, feet straight down)
+
+# Neutral pose
+SERVO QU 45
+SERVO EU 135
+SERVO ZU 135
+SERVO CU 45
+SERVO QL 0
+SERVO EL 180
+SERVO ZL 180
+SERVO CL 0
+DELAY 200

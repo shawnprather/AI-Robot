@@ -1,0 +1,15 @@
+# PATROL - walk a square
+# File names are looked up in this script's own folder.
+# Tune the turn count: run turn_left.txt alone and count how many
+# cycles make a 90 degree turn, then put that number below.
+
+RUN stand.txt
+RUN walk_forward.txt 4
+RUN turn_left.txt 3
+RUN walk_forward.txt 4
+RUN turn_left.txt 3
+RUN walk_forward.txt 4
+RUN turn_left.txt 3
+RUN walk_forward.txt 4
+RUN turn_left.txt 3
+RUN stand.txt

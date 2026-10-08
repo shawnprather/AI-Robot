@@ -1,0 +1,11 @@
+# DANCE - a short routine built from the other scripts
+
+RUN stand.txt
+RUN sway.txt 2
+RUN crab_left.txt 2
+RUN crab_right.txt 2
+RUN pushup.txt 3
+RUN turn_right.txt 2
+RUN turn_left.txt 2
+RUN wiggle.txt 2
+RUN stand.txt

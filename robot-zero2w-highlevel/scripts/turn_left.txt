@@ -1,0 +1,55 @@
+# TURN LEFT (in place)
+# Tank-style: left legs walk backward, right legs walk forward.
+# Starts and ends in neutral stand - run stand.txt first.
+# Pair A = Q+C (front-left + rear-right), Pair B = E+Z (front-right + rear-left)
+
+# Lift pair A
+SERVO QL 40
+SERVO CL 40
+DELAY 200
+
+# A swings ahead in the air, planted B pushes back (body moves)
+SERVO QU 65
+SERVO CU 65
+SERVO EU 115
+SERVO ZU 115
+DELAY 200
+
+# Plant pair A
+SERVO QL 0
+SERVO CL 0
+DELAY 200
+
+# Lift pair B
+SERVO EL 140
+SERVO ZL 140
+DELAY 200
+
+# B swings ahead in the air (full stride), planted A pushes back
+SERVO EU 155
+SERVO ZU 155
+SERVO QU 25
+SERVO CU 25
+DELAY 200
+
+# Plant pair B
+SERVO EL 180
+SERVO ZL 180
+DELAY 200
+
+# Lift pair A
+SERVO QL 40
+SERVO CL 40
+DELAY 200
+
+# A swings to center in the air, planted B pushes back to center
+SERVO QU 45
+SERVO CU 45
+SERVO EU 135
+SERVO ZU 135
+DELAY 200
+
+# Plant pair A - back in neutral stand
+SERVO QL 0
+SERVO CL 0
+DELAY 200

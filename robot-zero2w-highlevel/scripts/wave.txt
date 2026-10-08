@@ -1,0 +1,72 @@
+# WAVE - sit back and wave the front-left leg
+# Starts and ends in neutral stand.
+#
+# Why it sits first: lifting one leg leaves 3 feet. In the X stance the
+# body's center sits exactly on the line between the two diagonal feet
+# (front-right to rear-left), so with front-left up it tips onto that leg.
+# Dropping the rear moves the weight backward, off that line, so it stays up.
+
+# --- Stand (in case it isn't already) ---
+SERVO QU 45
+SERVO EU 135
+SERVO ZU 135
+SERVO CU 45
+SERVO QL 0
+SERVO EL 180
+SERVO ZL 180
+SERVO CL 0
+DELAY 200
+
+# --- Sit: rear feet rotate up 70, rear of body drops, weight shifts back ---
+SERVO ZL 145
+SERVO CL 35
+DELAY 300
+
+# --- Brace: step front-right foot forward/inward so it sits under the body more ---
+# Lift front-right
+SERVO EL 140
+DELAY 200
+# Swing it 30 forward (forward = increase for EU)
+SERVO EU 165
+DELAY 200
+# Plant it
+SERVO EL 180
+DELAY 200
+
+# --- Raise front-left above horizontal (90 = horizontal, 120 = pointing up a bit) ---
+SERVO QL 120
+DELAY 300
+
+# --- Wave: swing the raised leg back and forth (QU: lower = forward) ---
+SERVO QU 15
+DELAY 200
+SERVO QU 75
+DELAY 200
+SERVO QU 15
+DELAY 200
+SERVO QU 75
+DELAY 200
+SERVO QU 15
+DELAY 200
+SERVO QU 75
+DELAY 200
+# Back to center
+SERVO QU 45
+DELAY 200
+
+# --- Lower front-left back down ---
+SERVO QL 0
+DELAY 300
+
+# --- Undo the brace: front-right back to neutral ---
+SERVO EL 140
+DELAY 200
+SERVO EU 135
+DELAY 200
+SERVO EL 180
+DELAY 200
+
+# --- Stand up: rear feet back to straight down ---
+SERVO ZL 180
+SERVO CL 0
+DELAY 300
