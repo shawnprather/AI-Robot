@@ -18,7 +18,7 @@ pub struct Robot {
     pub uart: Arc<Mutex<UartDriver<'static>>>,
     pub mpu: Option<Mpu6050>,
     pub sht: Option<Sht31>,
-    pub servos: HashMap<String, LedcDriver<'static>>
+    pub servos: HashMap<&'static str, LedcDriver<'static>>
 }
 
 pub struct RobotReadings {

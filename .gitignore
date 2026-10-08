@@ -8,6 +8,7 @@ target/
 *.test
 *.out
 vendor/
+robot-zero2w-highlevel/robot
 
 # Editor
 .vscode/
@@ -19,6 +20,8 @@ vendor/
 # Build artifacts
 *.bin
 *.elf
+
+photos/
 
 # ESP toolchain
 export-esp.sh
